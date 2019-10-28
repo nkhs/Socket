@@ -1,5 +1,5 @@
 /*
- * config.h 包含该tcp/ip套接字编程所需要的基本头文件，与server.c client.c位于同一目录下
+ * config.h Including tcp/ip Basic header files required for socket programming，server.c and client.c located in the same directory
 */
 
 #include <stdio.h>

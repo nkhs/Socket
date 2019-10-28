@@ -1,36 +1,36 @@
 /*******************************************************************************
-* 服务器处理用户基本操作处理实现文件
-* 2015-12-14 yrr实现
+* The server processes the user basic operation processing implementation file
+* 2015-12-14 yrr achieve
 *
 ********************************************************************************/
 
 #include "config.h"
 
-/*声明全局变量 -- 在线用户链表*/
+/*Declare global variables -- Online user list*/
 extern ListNode *userList;
 
 /**************************************************
-函数名：loginUser
-功能：用户登陆函数实现
-参数：msg--用户发送的登陆消息 sockfd--套接字描述符
-返回值：成功登陆返回SUCCESS 否则返回异常类型
+Function name：loginUser
+Features：User login function implementation
+Parameter：msg--Login message sent by the user sockfd-socket descriptor
+Return value：Successful login back SUCCESS, Otherwise return the exception type
 ****************************************************/
 int loginUser(Message *msg , int sockfd)
 {
 	int ret;
-	/*声明用户信息*/
+	/*Declare user information*/
 	User user;
 	char buf[MAX_LINE];
 	
-	/*声明数据库变量*/
+	/*Declare database variables*/
 	sqlite3 *db;
 	sqlite3_stmt *stmt;
 	const char *tail;
 
-	/*声明sql语句存储变量*/
+	/*statement sql Statement storage variable*/
 	char sql[128];
 
-	/*存储操作结果消息*/
+	/*Store operation result message*/
 	Message message;
 
 	/*接收用户信息*/
@@ -40,11 +40,11 @@ int loginUser(Message *msg , int sockfd)
 	user.userAddr = (*msg).sendAddr;
 	user.sockfd = sockfd;
 
-	/*查看在线用户列表，该用户是否已在线*/
+	/*View online user list, whether the user is online*/
 	if(isOnLine(userList , &user) == 1)
 		return ALREADY_ONLINE;
 
-	/*（1）打开数据库*/
+	/*（1）Open the database*/
 	ret = sqlite3_open(DB_NAME, &db);
 	if(ret != SQLITE_OK)
 	{
@@ -52,7 +52,7 @@ int loginUser(Message *msg , int sockfd)
 		return FAILED;
 	}//if
 
-	/*（2）检查登陆用户名和密码*/
+	/*（2）Check login username and password*/
 	memset(sql , 0 , sizeof(sql));
 	sprintf(sql , "select * from User where userName='%s' and password='%s';",user.userName , user.password);
 	
@@ -65,20 +65,20 @@ int loginUser(Message *msg , int sockfd)
 		printf("database select fail!\n");
 		return FAILED;		
 	}//if
-	/*执行*/
+	/*carried out*/
 	ret = sqlite3_step(stmt);
-	//如果有数据则返回SQLITE_ROW，当到达末尾返回SQLITE_DONE
+	//Return if there is data SQLITE_ROW，Return when reaching the end SQLITE_DONE
 	while(ret == SQLITE_ROW)
 	{
 		ret = sqlite3_step(stmt);
 		sqlite3_finalize(stmt);
 		sqlite3_close(db);
 		ret = SUCCESS;
-		/*如果登陆操作成功，添加到在线用户链表*/
+		/*If the login operation is successful, add to the online user list*/
 		userList = insertNode(userList , &user);
 		return ret;
 	}//while
-	/*销毁句柄，关闭数据库*/
+	/*Destroy the handle and close the database*/
 	sqlite3_finalize(stmt);
 	sqlite3_close(db);	
 	 

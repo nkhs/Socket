@@ -23,10 +23,10 @@ config.o: config.c config.h
 
 chat.o: chat.c config.h
 	cc -c chat.c
-#比较稳健的clean做法，表示clean是一个伪目标
+#A more robust clean practice, indicating that clean is a pseudo target
 .PHONY: clean
 
-#前面-的意思是：也许某些文件出现问题，忽略，继续执行
+#The front - means: maybe some files have problems, ignore, continue to execute
 clean:
 	-rm server $(objects) 
 

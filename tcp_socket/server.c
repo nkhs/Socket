@@ -9,7 +9,7 @@ int main(int argc , char **argv)
 	/*声明服务器地址和客户链接地址*/
 	struct sockaddr_in servaddr , cliaddr;
 
-	/*声明服务器监听套接字和客户端链接套接字*/
+	/*声明服务器MONITOR套接字和客户端链接套接字*/
 	int listenfd , connfd;
 	pid_t childpid;
 
@@ -18,7 +18,7 @@ int main(int argc , char **argv)
 
 	socklen_t clilen;
 
-	/*(1) 初始化监听套接字listenfd*/
+	/*(1) 初始化MONITOR套接字listenfd*/
 	if((listenfd = socket(AF_INET , SOCK_STREAM , 0)) < 0)
 	{
 		perror("socket error");
@@ -39,7 +39,7 @@ int main(int argc , char **argv)
 		exit(1);
 	}//if
 
-	/*(4) 监听客户请求*/
+	/*(4) MONITOR客户请求*/
 	if(listen(listenfd , LISTENQ) < 0)
 	{
 		perror("listen error");
@@ -72,6 +72,6 @@ int main(int argc , char **argv)
 		close(connfd);
 	}//for
 	
-	/*(6) 关闭监听套接字*/
+	/*(6) 关闭MONITOR套接字*/
 	close(listenfd);
 }

@@ -43,7 +43,7 @@ int main()
 	//定义地址结构
 	struct sockaddr_in servaddr , cliaddr;
 	
-	/*(1) 创建套接字*/
+	/*(1) Create a socket*/
 	if((listenfd = socket(AF_INET , SOCK_STREAM , 0)) == -1)
 	{
 		perror("socket error.\n");
@@ -63,7 +63,7 @@ int main()
 		exit(1);
 	}//if
 
-	/*(4) 监听*/
+	/*(4) MONITOR*/
 	if(listen(listenfd , LISTENQ) < 0)
 	{
 		perror("listen error.\n");

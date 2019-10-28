@@ -54,7 +54,7 @@ int main(int argc , char **argv)
 
 	bind(listenfd , (struct sockaddr *)&servaddr , sizeof(servaddr));
 
-	/*(3) 监听*/
+	/*(3) MONITOR*/
 	listen(listenfd , LISTENQ);
 
 	/*(4) Setting poll*/

@@ -34,10 +34,10 @@ int main(int argc , char **argv)
 
 	struct sockaddr_in servaddr , cliaddr;
 
-	/*(1) 得到监听描述符*/
+	/*(1) Get listener descriptor*/
 	listenfd = socket(AF_INET , SOCK_STREAM , 0);
 
-	/*(2) 绑定套接字*/
+	/*(2) BINDING SOCKET*/
 	bzero(&servaddr , sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -45,10 +45,10 @@ int main(int argc , char **argv)
 
 	bind(listenfd , (struct sockaddr *)&servaddr , sizeof(servaddr));
 
-	/*(3) 监听*/
+	/*(3) MONITOR*/
 	listen(listenfd , LISTENQ);
 
-	/*(4) 设置select*/
+	/*(4) Setting select*/
 	maxfd = listenfd;
 	maxi = -1;
 	for(i=0 ; i<FD_SETSIZE ; ++i)
@@ -58,7 +58,7 @@ int main(int argc , char **argv)
 	FD_ZERO(&allset);
 	FD_SET(listenfd , &allset);
 
-	/*(5) 进入服务器接收请求死循环*/
+	/*(5) ENTER THE SERVER TO RECEIVE THE REQUEST INFINITE LOOP*/
 	while(1)
 	{
 		rset = allset;
@@ -66,7 +66,7 @@ int main(int argc , char **argv)
 		
 		if(FD_ISSET(listenfd , &rset))
 		{
-			/*接收客户端的请求*/
+			/*RECEIVE CLIENT REQUESTS*/
 			clilen = sizeof(cliaddr);
 
 			printf("\naccpet connection~\n");
@@ -79,7 +79,7 @@ int main(int argc , char **argv)
 
 			printf("accpet a new client: %s:%d\n", inet_ntoa(cliaddr.sin_addr) , cliaddr.sin_port);
 
-			/*将客户链接套接字描述符添加到数组*/
+			/*ADD A CLIENT LINK SOCKET DESCRIPTOR TO AN ARRAY*/
 			for(i=0 ; i<FD_SETSIZE ; ++i)
 			{
 				if(client[i] < 0)
@@ -111,7 +111,7 @@ int main(int argc , char **argv)
 				continue;
 			if(FD_ISSET(sockfd , &rset))
 			{
-				/*处理客户请求*/
+				/*HANDLING CUSTOMER REQUESTS*/
 				printf("\nreading the socket~~~ \n");
 				
 				bzero(buf , MAX_LINE);

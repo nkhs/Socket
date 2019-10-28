@@ -20,7 +20,7 @@ int max(int a , int b)
 	return a > b ? a : b;
 }
 
-/*readline函数实现*/
+/*readline function implementation*/
 ssize_t readline(int fd, char *vptr, size_t maxlen)
 {
 	ssize_t	n, rc;
@@ -43,10 +43,10 @@ ssize_t readline(int fd, char *vptr, size_t maxlen)
 	return(n);
 }
 
-/*普通客户端消息处理函数*/
+/*Ordinary client message processing function*/
 void str_cli(int sockfd)
 {
-	/*发送和接收缓冲区*/
+	/*Send and receive buffers*/
 	char sendline[MAX_LINE] , recvline[MAX_LINE];
 	while(fgets(sendline , MAX_LINE , stdin) != NULL)	
 	{
@@ -71,25 +71,25 @@ void str_cli(int sockfd)
 
 int main(int argc , char **argv)
 {
-	/*声明套接字和链接服务器地址*/
+	/*Declare socket and link server address*/
     int sockfd;
     struct sockaddr_in servaddr;
 
-    /*判断是否为合法输入*/
+    /*Determine if it is a legal input*/
     if(argc != 2)
     {
         perror("usage:tcpcli <IPaddress>");
         exit(1);
     }//if
 
-    /*(1) 创建套接字*/
+    /*(1) Create a socket*/
     if((sockfd = socket(AF_INET , SOCK_STREAM , 0)) == -1)
     {
         perror("socket error");
         exit(1);
     }//if
 
-    /*(2) 设置链接服务器地址结构*/
+    /*(2) Set the link server address structure*/
     bzero(&servaddr , sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(PORT);
@@ -99,14 +99,14 @@ int main(int argc , char **argv)
         exit(1);
     }//if
 
-    /*(3) 发送链接服务器请求*/
+    /*(3) SEND LINK SERVER REQUEST*/
     if(connect(sockfd , (struct sockaddr *)&servaddr , sizeof(servaddr)) < 0)
     {
         perror("connect error");
         exit(1);
     }//if
 
-	/*调用消息处理函数*/
+	/*CALLING A MESSAGE HANDLER*/
 	str_cli(sockfd);	
 	exit(0);
 }

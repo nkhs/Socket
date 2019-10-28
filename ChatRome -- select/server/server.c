@@ -17,7 +17,7 @@ ListNode *userList = NULL;
 **********************************************/
 int main(void)
 {
-	/*声明服务器监听描述符和客户链接描述符*/
+	/*声明服务器MONITOR描述符和客户链接描述符*/
 	int i , n , ret , maxi , maxfd , listenfd , connfd , sockfd;
 
 	socklen_t clilen;
@@ -43,7 +43,7 @@ int main(void)
 	/*UserInfo*/
 	User user;	
 
-	/*(1) 创建套接字*/
+	/*(1) Create a socket*/
 	if((listenfd = socket(AF_INET , SOCK_STREAM , 0)) == -1)
 	{
 		perror("socket error.\n");
@@ -65,7 +65,7 @@ int main(void)
 		exit(1);
 	}//if
 
-	/*(4) 监听*/
+	/*(4) MONITOR*/
 	if(listen(listenfd , LISTENEQ) < 0)
 	{
 		perror("listen error.\n");
@@ -83,7 +83,7 @@ int main(void)
 	/*清空allset描述符集*/
 	FD_ZERO(&allset);
 
-	/*将监听描述符加到allset中*/
+	/*将MONITOR描述符加到allset中*/
 	FD_SET(listenfd , &allset);
 
 	/*(6) 接收客户链接*/
@@ -96,7 +96,7 @@ int main(void)
 		/*测试listenfd是否在rset描述符集中*/
 		if(FD_ISSET(listenfd , &rset))
 		{
-			/*接收客户端的请求*/
+			/*RECEIVE CLIENT REQUESTS*/
 			clilen = sizeof(cliaddr);
 			if((connfd = accept(listenfd , (struct sockaddr *)&cliaddr , &clilen)) < 0)
 			{

@@ -30,7 +30,7 @@ int main(int argc , char *argv[])
 	user.speak = 1;
 
 	
-    /*判断是否为合法输入*/
+    /*Determine if it is a legal input*/
     if(argc != 2)
     {
         perror("usage:tcpcli <IPaddress>");
@@ -39,14 +39,14 @@ int main(int argc , char *argv[])
 
 	while(1)
 	{
-		 /*(1) 创建套接字*/
+		 /*(1) Create a socket*/
 		if((sockfd = socket(AF_INET , SOCK_STREAM , 0)) == -1)
 		{
 			perror("socket error");
 			exit(1);
 		}//if
 
-		/*(2) 设置链接服务器地址结构*/
+		/*(2) Set the link server address structure*/
 		bzero(&servaddr , sizeof(servaddr));		/*清空地址结构*/
 		servaddr.sin_family = AF_INET;				/*使用IPV4通信域*/
 		servaddr.sin_port = htons(PORT);			/*端口号转换为网络字节序*/
@@ -57,7 +57,7 @@ int main(int argc , char *argv[])
 			exit(1);
 		}//if
 
-		 /*(3) 发送链接服务器请求*/
+		 /*(3) SEND LINK SERVER REQUEST*/
 		if( connect(sockfd , (struct sockaddr *)&servaddr , sizeof(servaddr)) < 0)
 		{
 			perror("connect error");

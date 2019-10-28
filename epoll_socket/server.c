@@ -54,7 +54,7 @@ int main(int argc , char **argv)
 	/*声明epoll_event结构体变量，ev用于注册事件，数组用于回传要处理的事件*/
 	struct epoll_event ev, events[20];
 
-	/*(1) 得到监听描述符*/
+	/*(1) Get listener descriptor*/
 	listenfd = socket(AF_INET , SOCK_STREAM , 0);
 	setNonblocking(listenfd);
 
@@ -67,7 +67,7 @@ int main(int argc , char **argv)
 	/*注册事件*/
 	epoll_ctl(epfd, EPOLL_CTL_ADD, listenfd, &ev);		
 
-	/*(2) 绑定套接字*/	
+	/*(2) BINDING SOCKET*/	
 	bzero(&servaddr , sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -75,13 +75,13 @@ int main(int argc , char **argv)
 
 	bind(listenfd , (struct sockaddr *)&servaddr , sizeof(servaddr));
 
-	/*(3) 监听*/
+	/*(3) MONITOR*/
 	listen(listenfd , LISTENQ);
 
-	/*(4) 进入服务器接收请求死循环*/
+	/*(4) ENTER THE SERVER TO RECEIVE THE REQUEST INFINITE LOOP*/
 	while(1)
 	{
-		/*等待事件发生*/
+		/*Waiting for event to occur*/
 		nfds = epoll_wait(epfd , events , CONNECT_SIZE , -1);
 		if(nfds <= 0)
 			continue;
@@ -93,7 +93,7 @@ int main(int argc , char **argv)
 			/*检测到用户链接*/
 			if(events[i].data.fd == listenfd)
 			{	
-				/*接收客户端的请求*/
+				/*RECEIVE CLIENT REQUESTS*/
 				clilen = sizeof(cliaddr);
 
 				if((connfd = accept(listenfd , (struct sockaddr *)&cliaddr , &clilen)) < 0)
@@ -126,7 +126,7 @@ int main(int argc , char **argv)
 					buf[n] = '\0';
 					printf("clint[%d] send message: %s\n", i , buf);
 				
-					/*设置用于注册写操作文件描述符和事件*/
+					/*Set to register write file descriptors and events*/
 					ev.data.fd = sockfd;
 					ev.events = EPOLLOUT| EPOLLET;	
 					epoll_ctl(epfd , EPOLL_CTL_MOD , sockfd , &ev);			
@@ -141,10 +141,10 @@ int main(int argc , char **argv)
 					printf("error writing to the sockfd!\n");
 					break;
 				}//if
-				/*设置用于读的文件描述符和事件*/
+				/*Set file descriptors and events for reading*/
 				ev.data.fd = sockfd;
 				ev.events = EPOLLIN | EPOLLET;
-				/*修改*/
+				/*modify*/
 				epoll_ctl(epfd , EPOLL_CTL_MOD , sockfd , &ev);				
 			}//else
 		}//for

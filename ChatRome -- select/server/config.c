@@ -1,15 +1,15 @@
 /*******************************************************************************
-* 基本配置文件实现 -- 包含所需头文件
-* 用户信息结构体定义
-* 在线用户链表定义
+* Basic profile implementation -- contains the required header files
+* User information structure definition
+* Online user list definition
 ********************************************************************************/
 #include "config.h"
 
 /*************************************
-函数名：StateMsg
-功能：根据操作结果得到相应的消息内容
-参数：stateRet -- 操作结果整数值
-返回值：操作结果字符串
+Function name: StateMsg
+Function: get the corresponding message content according to the operation result
+Parameters: stateRet -- the result of the operation
+Return value: operation result string
 **************************************/
 char *stateMsg(int stateRet)
 {
@@ -55,10 +55,10 @@ char *stateMsg(int stateRet)
 };
 
 /*************************************
-函数名：copyUser
-功能：用户结构体对象拷贝操作
-参数：user1--目标拷贝对象 user2--源拷贝对象
-返回值：无
+Function name: copyUser
+Function: User structure object copy operation
+Parameters: user1--target copy object user2--source copy object
+Return value: none
 **************************************/
 void copyUser(User *user1 , User *user2)
 {
