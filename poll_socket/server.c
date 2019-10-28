@@ -43,10 +43,10 @@ int main(int argc , char **argv)
 
 	struct sockaddr_in servaddr , cliaddr;
 
-	/*(1) 得到监听描述符*/
+	/*(1) Get listener descriptor*/
 	listenfd = socket(AF_INET , SOCK_STREAM , 0);
 
-	/*(2) 绑定套接字*/
+	/*(2) Binding socket*/
 	bzero(&servaddr , sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -57,7 +57,7 @@ int main(int argc , char **argv)
 	/*(3) 监听*/
 	listen(listenfd , LISTENQ);
 
-	/*(4) 设置poll*/
+	/*(4) Setting poll*/
 	client[0].fd = listenfd;
 	client[0].events = POLLRDNORM;
 	for(i=1 ; i<OPEN_MAX ; ++i)
@@ -66,14 +66,14 @@ int main(int argc , char **argv)
 	}//for
 	maxi = 0;
 
-	/*(5) 进入服务器接收请求死循环*/
+	/*(5) Enter the server to receive the request infinite loop*/
 	while(1)
 	{
 		nready = poll(client , maxi+1 , INFTIM);
 		
 		if(client[0].revents & POLLRDNORM)
 		{
-			/*接收客户端的请求*/
+			/*Receive client requests*/
 			clilen = sizeof(cliaddr);
 
 			printf("\naccpet connection~\n");
@@ -86,7 +86,7 @@ int main(int argc , char **argv)
 
 			printf("accpet a new client: %s:%d\n", inet_ntoa(cliaddr.sin_addr) , cliaddr.sin_port);
 			
-			/*将客户链接套接字描述符添加到数组*/
+			/*Add a client link socket descriptor to an array*/
 			for(i=1 ; i<OPEN_MAX ; ++i)
 			{
 				if(client[i].fd < 0)
@@ -102,7 +102,7 @@ int main(int argc , char **argv)
 				exit(1);
 			}//if
 	
-			/*该描述符等待的事件*/
+			/*The event that the descriptor is waiting for*/
 			client[i].events = POLLRDNORM;
 			if(i > maxi)
 				maxi = i;
@@ -115,10 +115,10 @@ int main(int argc , char **argv)
 		{
 			if((sockfd = client[i].fd) < 0)
 				continue;
-			/*该链接描述符实际发生的事件*/
+			/*The actual event of the link descriptor*/
 			if(client[i].revents & (POLLRDNORM | POLLERR))
 			{
-				/*处理客户请求*/
+				/*Handling customer requests*/
 				printf("\nreading the socket~~~ \n");
 				
 				bzero(buf , MAX_LINE);
